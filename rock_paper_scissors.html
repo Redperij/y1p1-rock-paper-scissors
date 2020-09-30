@@ -12,37 +12,36 @@
 
 <body>
     <section class="game">
-      <div class="score">
-        <div class="p1-score">
-          <h2>Player 1</h2>
-          <p>0</p>
+        <div class="score">
+            <div class="p1-score">
+                <h2>Player 1</h2>
+                <p>0</p>
+            </div>
+            <button id="aitoggle">AI</button>
+            <div class="p2-score">
+                <h2>Player 2</h2>
+                <p>0</p>
+            </div>
         </div>
-        <div class="p2-score">
-          <h2>Player 2</h2>
-          <p>0</p>
-        </div>
-      </div>
 
-      <div class="intro">
-        <h1>Rock Paper and Scissors</h1>
-        <button>Let's Play</button>
-      </div>
+        <div class="intro">
+            <h1>Rock, Paper, Scissors</h1>
+            <button>Start</button>
+        </div>
 
-      <div class="match fadeOut">
-        <h2 class="winner">Choose an option</h2>
-        <div class="hands">
-          <img class="player-hand" src="./assets/rock.png" alt="" />
-          <img class="computer-hand" src="./assets/rock.png" alt="" />
+        <div class="match fadeOut">
+            <h2 class="winner">Choose an option</h2>
+            <div class="hands">
+                <img class="p1hand" src="gfx/paper.png" alt="" />
+                <img class="p2hand" src="gfx/paper.png" alt="" />
+            </div>
+            <div class="options">
+                <button class="rock">Rock</button>
+                <button class="paper">Paper</button>
+                <button class="scissors">Scissors</button>
+            </div>
         </div>
-        <div class="options">
-          <button class="rock">rock</button>
-          <button class="paper">paper</button>
-          <button class="scissors">scissors</button>
-        </div>
-      </div>
     </section>
-
-    <script src="app.js"></script>
-  </body>
+</body>
 
 </html>
