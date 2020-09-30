@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: dimgray;
+    color: white;
+}
+
+h1 {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    display: block;
+}
+
+#main {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    display: block;
+    font-size: large;
+    padding-bottom: 5%;
+}
+
+main {
+    display: flexbox;
+    padding-top: 20%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#player1 {
+    width: auto;
+    position: fixed;
+}
+
+#p1heading {
+    font-size: large;
+}
+
+#player2 {
+    width: auto;
+    position: fixed;
+    left: 75%;
+}
+
+#buttons {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    position: fixed;
+    bottom: 25%;
+    left: 25%;
+}
+
+#p1hand {
+    transform: rotateY(180deg);
+}
