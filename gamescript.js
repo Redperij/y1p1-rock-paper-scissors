@@ -19,8 +19,7 @@ function AiToggle() {
 
 function startGame() {
     console.log('startGame()');
-    const Intro = document.querySelector('.intro');
-    Intro.classList.add('fadeOut');
+    document.querySelector('.intro').classList.add('fadeOut');
     AiButton.classList.add('fadeOut');
 
     document.querySelector('.match').classList.add('fadeIn');
@@ -72,78 +71,106 @@ function startMatchPvE() {
     If player have chosen something, we already can determine result of the round.
     So there is no need to do it in a way how 2 players are handled.
     */
-    rockButton.addEventListener('click', () => {
+    rockButton.addEventListener('click', HandleRock); // Player chosen rock
+    function HandleRock() {
         p1hand.src = 'gfx/rock.png';
-        let AIchoice = HandleAI();
-        if ( AIchoice == 'paper' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            document.querySelector('.winner').textContent = 'Computer won! \n Choose option.';
-        }
-        else if ( AIchoice == 'scissors' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            document.querySelector('.winner').textContent = 'You won! \n Choose option.';
-        }
-        else {
-            document.querySelector('.winner').textContent = 'Nobody won! \n Choose option.';
-        }
-        if(p1score == 10 || p2score == 10 ) {
-            endGame();
-        }
-    });
-    paperButton.addEventListener('click', () => {
+        result('rock',HandleAI());
+    }
+    paperButton.addEventListener('click', HandlePaper); // Player chosen paper
+    function HandlePaper() {
         p1hand.src = 'gfx/paper.png';
-        let AIchoice = HandleAI();
-        if ( AIchoice == 'rock' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            document.querySelector('.winner').textContent = 'You won! \n Choose option.';
-        }
-        else if ( AIchoice == 'scissors' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            document.querySelector('.winner').textContent = 'Computer won! \n Choose option.';
-        }
-        else {
-            document.querySelector('.winner').textContent = 'Nobody won! \n Choose option.';
-        }
-        if(p1score == 10 || p2score == 10 ) {
-            endGame();
-        }
-    });
-    scissorsButton.addEventListener('click', () => {
+        result('paper',HandleAI());
+    }
+    scissorsButton.addEventListener('click', HandleScissors); // Player chosen scissors
+    function HandleScissors() {
         p1hand.src = 'gfx/scissors.png';
-        let AIchoice = HandleAI();
-        if ( AIchoice == 'rock' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            document.querySelector('.winner').textContent = 'Computer won! \n Choose option.';
-        }
-        else if ( AIchoice == 'paper' ) {
+        result('scissors',HandleAI());
+    }
+    function result(playerChoice, AIchoice) {
+        console.log('result!')
+        if ( AIchoice == 'rock' && playerChoice == 'paper' ) {
             p1score++;
             p1scoreText.textContent = p1score;
-            document.querySelector('.winner').textContent = 'You won! \n Choose option.';
+            document.querySelector('.winner').textContent = 'You won! Choose option.';
+        }
+        else if ( AIchoice == 'rock' && playerChoice == 'scissors' ) {
+            p2score++;
+            p2scoreText.textContent = p2score;
+            document.querySelector('.winner').textContent = 'Computer won! Choose option.';
+        }
+        else if ( AIchoice == 'paper' && playerChoice == 'scissors' ) {
+            p1score++;
+            p1scoreText.textContent = p1score;
+            document.querySelector('.winner').textContent = 'You won! Choose option.';
+        }
+        else if ( AIchoice == 'paper' && playerChoice == 'rock' ) {
+            p2score++;
+            p2scoreText.textContent = p2score;
+            document.querySelector('.winner').textContent = 'Computer won! Choose option.';
+        }
+        else if ( AIchoice == 'scissors' && playerChoice == 'rock' ) {
+            p1score++;
+            p1scoreText.textContent = p1score;
+            document.querySelector('.winner').textContent = 'You won! Choose option.';
+        }
+        else if ( AIchoice == 'scissors' && playerChoice == 'paper' ) {
+            p2score++;
+            p2scoreText.textContent = p2score;
+            document.querySelector('.winner').textContent = 'Computer won! Choose option.';
         }
         else {
-            document.querySelector('.winner').textContent = 'Nobody won! \n Choose option.';
+            document.querySelector('.winner').textContent = 'Nobody won! Choose option.';
         }
+        // If somebody has maximum score we should end the game
         if(p1score >= 10 || p2score >= 10 ) {
-            endGame();
+            rockButton.removeEventListener('click', HandleRock); // This step is vital for restart mechanics, we must remove all button event listeners.
+            scissorsButton.removeEventListener('click', HandleScissors); // Otherwise we will find ourselves pressing one button several times and determining several results. 
+            paperButton.removeEventListener('click', HandlePaper);
+            endGame(p1score, p2score);
         }
-    });
+    }
 }
 
 // Finishing the game
-function endGame() {
-    document.querySelector('.winner').textContent = 'ENOUGH!';
+function endGame(p1score, p2score) {
+    document.querySelector('.match').classList.remove('fadeIn'); // hiding match screen
+    if ( AiIsOn ) {
+        if ( p1score > p2score ) {
+            document.querySelector('.endgame h2').textContent = 'Player has won with score ' + p1score + '/' + p2score + '!';
+        }
+        else {
+            document.querySelector('.endgame h2').textContent = 'Computer has won with score ' + p1score + '/' + p2score + '!';
+        }
+    }
+    else {
+        if ( p1score > p2score ) {
+            document.querySelector('.endgame h2').textContent = 'Player 1 has won with score ' + p1score + '/' + p2score + '!';
+        }
+        else {
+            document.querySelector('.endgame h2').textContent = 'Player 2 has won with score ' + p1score + '/' + p2score + '!';
+        }
+    }
+    document.querySelector('.endgame').classList.add('fadeIn'); //endgame screen
+    document.querySelector('.endgame button').addEventListener('click', restartGame); // restart button
 }
 
-/*
+
 function restartGame() {
-
+    // removing button event listener in order to prevent bugs
+    document.querySelector('.endgame button').removeEventListener('click', restartGame);
+    // hiding endgame screen
+    document.querySelector('.endgame').classList.remove('fadeIn');
+    // returning things back to normal
+    document.querySelector('.winner').textContent = 'Choose an option';
+    p1score = 0;
+    p2score = 0;
+    document.querySelector('.p1-score p').textContent = p1score;
+    document.querySelector('.p2-score p').textContent = p2score;
+    // returning start screen
+    document.querySelector('.intro').classList.remove('fadeOut');
+    AiButton.classList.remove('fadeOut');
 }
-*/
+
 const AiButton = document.querySelector('#aitoggle');
 AiButton.addEventListener('click', AiToggle);
 
