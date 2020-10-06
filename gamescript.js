@@ -4,6 +4,8 @@ let p1score = 0; // First player score
 let p2score = 0; // Second player score
 let p1row = 0; // Used for determining quantity of rounds won by player in a row
 let p2row = 0;
+let p1Resultlog = []; // Result logs are not used and are here only for debugging
+let p2Resultlog = []; // They keep all results for assigned player until game restart
 
 function AiToggle() {
     if ( AiIsOn ) {
@@ -69,7 +71,11 @@ function startMatchPvP() {
         function HandleRock() {
             p1hand.src = 'gfx/rock.png';
             p1choice = 'rock';
+
+            // loging
+            p1Resultlog.push('rock');
             console.log('Player 1 have chosen ' + p1choice);
+
             rockButton.removeEventListener('click', HandleRock);
             paperButton.removeEventListener('click', HandlePaper);
             scissorsButton.removeEventListener('click', HandleScissors);
@@ -79,7 +85,11 @@ function startMatchPvP() {
         function HandlePaper() {
             p1hand.src = 'gfx/paper.png';
             p1choice = 'paper';
+
+            // loging
+            p1Resultlog.push('paper');
             console.log('Player 1 have chosen ' + p1choice);
+
             rockButton.removeEventListener('click', HandleRock);
             paperButton.removeEventListener('click', HandlePaper);
             scissorsButton.removeEventListener('click', HandleScissors);
@@ -89,7 +99,11 @@ function startMatchPvP() {
         function HandleScissors() {
             p1hand.src = 'gfx/scissors.png';
             p1choice = 'scissors';
+
+            // loging
+            p1Resultlog.push('scissors');
             console.log('Player 1 have chosen ' + p1choice);
+
             rockButton.removeEventListener('click', HandleRock);
             paperButton.removeEventListener('click', HandlePaper);
             scissorsButton.removeEventListener('click', HandleScissors);
@@ -119,7 +133,11 @@ function startMatchPvP() {
         function HandleRock() {
             p2hand.src = 'gfx/rock.png';
             p2choice = 'rock';
+
+            //loging
+            p2Resultlog.push('rock');
             console.log('Player 2 have chosen ' + p2choice);
+
             rockButton.removeEventListener('click', HandleRock);
             paperButton.removeEventListener('click', HandlePaper);
             scissorsButton.removeEventListener('click', HandleScissors);
@@ -129,7 +147,11 @@ function startMatchPvP() {
         function HandlePaper() {
             p2hand.src = 'gfx/paper.png';
             p2choice = 'paper';
+
+            //loging
+            p2Resultlog.push('paper');
             console.log('Player 2 have chosen ' + p2choice);
+
             rockButton.removeEventListener('click', HandleRock);
             paperButton.removeEventListener('click', HandlePaper);
             scissorsButton.removeEventListener('click', HandleScissors);
@@ -139,7 +161,11 @@ function startMatchPvP() {
         function HandleScissors() {
             p2hand.src = 'gfx/scissors.png';
             p2choice = 'scissors';
+            
+            //loging
+            p2Resultlog.push('scissors');
             console.log('Player 2 have chosen ' + p2choice);
+
             rockButton.removeEventListener('click', HandleRock);
             paperButton.removeEventListener('click', HandlePaper);
             scissorsButton.removeEventListener('click', HandleScissors);
@@ -176,72 +202,82 @@ function startMatchPvP() {
             // Removing animation
             p1hand.style.animation = "";
             p2hand.style.animation = "";
-        }, 2000 );
 
-        if ( p2choice == 'rock' && p1choice == 'paper' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            p1row++;
-            p2row = 0;
-            console.log('Player 1 won');
-            document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
-        }
-        else if ( p2choice == 'rock' && p1choice == 'scissors' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            p2row++;
-            p1row = 0;
-            console.log('Player 2 won');
-            document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
-        }
-        else if ( p2choice == 'paper' && p1choice == 'scissors' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            p1row++;
-            p2row = 0;
-            console.log('Player 1 won');
-            document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
-        }
-        else if ( p2choice == 'paper' && p1choice == 'rock' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            p2row++;
-            p1row = 0;
-            console.log('Player 2 won');
-            document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
-        }
-        else if ( p2choice == 'scissors' && p1choice == 'rock' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            p1row++;
-            p2row = 0;
-            console.log('Player 1 won');
-            document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
-        }
-        else if ( p2choice == 'scissors' && p1choice == 'paper' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            p2row++;
-            p1row = 0;
-            console.log('Player 2 won');
-            document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
-        }
-        else {
-            p1row = 0;
-            p2row = 0;
-            console.log('Nobody won');
-            document.querySelector('.winner').textContent = 'Nobody won! Press any button to continue';
-        }
-        // If somebody has maximum score we should end the game
-        if ( p1score >= 10 || p2score >= 10 || p1row >= 3 || p2row >= 3 ) { 
-            document.querySelector('.turnscreen h2').textContent = 'Player 1 turn';
-            endGame( p1score, p2score, p1row, p2row );
-        }
-        // In other case we have to keep playing
-        else {
-            rockButton.addEventListener('click', prepareP1turn);
-            paperButton.addEventListener('click', prepareP1turn);
-            scissorsButton.addEventListener('click', prepareP1turn);
+            roundResult()
+
+        }, 2000 );
+        function roundResult() {
+            if ( p2choice == 'rock' && p1choice == 'paper' ) {
+                p1score++;
+                p1scoreText.textContent = p1score;
+                p1row++;
+                p2row = 0;
+                console.log('Player 1 won');
+                document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
+            }
+            else if ( p2choice == 'rock' && p1choice == 'scissors' ) {
+                p2score++;
+                p2scoreText.textContent = p2score;
+                p2row++;
+                p1row = 0;
+                console.log('Player 2 won');
+                document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
+            }
+            else if ( p2choice == 'paper' && p1choice == 'scissors' ) {
+                p1score++;
+                p1scoreText.textContent = p1score;
+                p1row++;
+                p2row = 0;
+                console.log('Player 1 won');
+                document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
+            }
+            else if ( p2choice == 'paper' && p1choice == 'rock' ) {
+                p2score++;
+                p2scoreText.textContent = p2score;
+                p2row++;
+                p1row = 0;
+                console.log('Player 2 won');
+                document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
+            }
+            else if ( p2choice == 'scissors' && p1choice == 'rock' ) {
+                p1score++;
+                p1scoreText.textContent = p1score;
+                p1row++;
+                p2row = 0;
+                console.log('Player 1 won');
+                document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
+            }
+            else if ( p2choice == 'scissors' && p1choice == 'paper' ) {
+                p2score++;
+                p2scoreText.textContent = p2score;
+                p2row++;
+                p1row = 0;
+                console.log('Player 2 won');
+                document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
+            }
+            else {
+                p1row = 0;
+                p2row = 0;
+                console.log('Nobody won');
+                document.querySelector('.winner').textContent = 'Nobody won! Press any button to continue';
+            }
+            // Showing choices log
+            console.log('Player 1 choices are:');
+            console.log(p1Resultlog);
+            console.log('Player 2 choices are:');
+            console.log(p2Resultlog);
+
+            // If somebody has maximum score we should end the game
+            if ( p1score >= 10 || p2score >= 10 || p1row >= 3 || p2row >= 3 ) { 
+                document.querySelector('.turnscreen h2').textContent = 'Player 1 turn';
+                endGame( p1score, p2score, p1row, p2row );
+            }
+            // In other case we have to keep playing
+            else {
+                rockButton.addEventListener('click', prepareP1turn);
+                paperButton.addEventListener('click', prepareP1turn);
+                scissorsButton.addEventListener('click', prepareP1turn);
+            }
         }
     }
     // This function starts next round. In other words, reverts everything to the state of first player's turn.
@@ -273,20 +309,21 @@ function startMatchPvE() {
     // Hands
     const p1hand = document.querySelector('.p1hand');
     const p2hand = document.querySelector('.p2hand');
+
+    // Showing hands
+    p1hand.classList.remove('fadeOut');
+    p2hand.classList.remove('fadeOut');
     // function, which determines AI choice. Called to determine result.
     function HandleAI() {
         const randomVariable = Math.floor(Math.random()*3);
         console.log('AI rolled ' + randomVariable);
         if ( randomVariable < 1 ) {
-            p2hand.src = 'gfx/rock.png';
             return 'rock';
         }
         else if ( randomVariable < 2 ) {
-            p2hand.src = 'gfx/scissors.png';
             return 'scissors';
         }
         else {
-            p2hand.src = 'gfx/paper.png';
             return 'paper';
         }
     }
@@ -297,83 +334,122 @@ function startMatchPvE() {
     */
     rockButton.addEventListener('click', HandleRock); // Player chosen rock
     function HandleRock() {
+        document.querySelector('.winner').classList.add('fadeOut');
+        document.querySelector('.options').classList.add('fadeOut');
         p1hand.src = 'gfx/rock.png';
+        p2hand.src = 'gfx/rock.png';
         result('rock',HandleAI());
     }
     paperButton.addEventListener('click', HandlePaper); // Player chosen paper
     function HandlePaper() {
-        p1hand.src = 'gfx/paper.png';
+        document.querySelector('.winner').classList.add('fadeOut');
+        document.querySelector('.options').classList.add('fadeOut');
+        p1hand.src = 'gfx/rock.png';
+        p2hand.src = 'gfx/rock.png';
         result('paper',HandleAI());
     }
     scissorsButton.addEventListener('click', HandleScissors); // Player chosen scissors
     function HandleScissors() {
-        p1hand.src = 'gfx/scissors.png';
+        document.querySelector('.winner').classList.add('fadeOut');
+        document.querySelector('.options').classList.add('fadeOut');
+        p1hand.src = 'gfx/rock.png';
+        p2hand.src = 'gfx/rock.png';
         result('scissors',HandleAI());
     }
     // This function determines round result 
     function result(playerChoice, AIchoice) {
+        // Handling animation
+        p1hand.style.animation = "shakePlayer1 2s ease";
+        p2hand.style.animation = "shakePlayer2 2s ease";
+
+        setTimeout(() => {
+            // Showing choices
+            p1hand.src = `gfx/${playerChoice}.png`;
+            p2hand.src = `gfx/${AIchoice}.png`;
+
+            // Showing screen and options
+            document.querySelector('.winner').classList.remove('fadeOut');
+            document.querySelector('.options').classList.remove('fadeOut');
+
+            // Removing animation
+            p1hand.style.animation = "";
+            p2hand.style.animation = "";
+
+            roundResult();
+
+        }, 2000 );
+        // loging
         console.log('Player have chosen ' + playerChoice);
         console.log('Computer have chosen ' + AIchoice);
-        if ( AIchoice == 'rock' && playerChoice == 'paper' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            p1row++;
-            p2row = 0;
-            console.log('Player won!');
-            document.querySelector('.winner').textContent = 'You won! Choose option.';
-        }
-        else if ( AIchoice == 'rock' && playerChoice == 'scissors' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            p2row++;
-            p1row = 0;
-            console.log('Computer won!');
-            document.querySelector('.winner').textContent = 'Computer won! Choose option.';
-        }
-        else if ( AIchoice == 'paper' && playerChoice == 'scissors' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            p1row++;
-            p2row = 0;
-            console.log('Player won!');
-            document.querySelector('.winner').textContent = 'You won! Choose option.';
-        }
-        else if ( AIchoice == 'paper' && playerChoice == 'rock' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            p2row++;
-            p1row = 0;
-            console.log('Computer won!');
-            document.querySelector('.winner').textContent = 'Computer won! Choose option.';
-        }
-        else if ( AIchoice == 'scissors' && playerChoice == 'rock' ) {
-            p1score++;
-            p1scoreText.textContent = p1score;
-            p1row++;
-            p2row = 0;
-            console.log('Player won!');
-            document.querySelector('.winner').textContent = 'You won! Choose option.';
-        }
-        else if ( AIchoice == 'scissors' && playerChoice == 'paper' ) {
-            p2score++;
-            p2scoreText.textContent = p2score;
-            p2row++;
-            p1row = 0;
-            console.log('Computer won!');
-            document.querySelector('.winner').textContent = 'Computer won! Choose option.';
-        }
-        else {
-            p1row = 0;
-            p2row = 0;
-            console.log('Nobody won!');
-            document.querySelector('.winner').textContent = 'Nobody won! Choose option.';
-        }
-        // If somebody has maximum score we should end the game
-        if(p1score >= 10 || p2score >= 10 || p1row >= 3 || p2row >= 3 ) {
-            rockButton.removeEventListener('click', HandleRock); // This step is vital for restart mechanics, we must remove all button event listeners.
-            scissorsButton.removeEventListener('click', HandleScissors); // Otherwise we will find ourselves pressing one button several times and determining several results. 
-            paperButton.removeEventListener('click', HandlePaper);
-            endGame(p1score, p2score, p1row, p2row);
+        p1Resultlog.push(playerChoice);
+        p2Resultlog.push(AIchoice);
+        console.log('Player choices are:');
+        console.log(p1Resultlog);
+        console.log('Computer choices are:');
+        console.log(p2Resultlog);
+
+        function roundResult() {
+            if ( AIchoice == 'rock' && playerChoice == 'paper' ) {
+                p1score++;
+                p1scoreText.textContent = p1score;
+                p1row++;
+                p2row = 0;
+                console.log('Player won!');
+                document.querySelector('.winner').textContent = 'You won! Choose option.';
+            }
+            else if ( AIchoice == 'rock' && playerChoice == 'scissors' ) {
+                p2score++;
+                p2scoreText.textContent = p2score;
+                p2row++;
+                p1row = 0;
+                console.log('Computer won!');
+                document.querySelector('.winner').textContent = 'Computer won! Choose option.';
+            }
+            else if ( AIchoice == 'paper' && playerChoice == 'scissors' ) {
+                p1score++;
+                p1scoreText.textContent = p1score;
+                p1row++;
+                p2row = 0;
+                console.log('Player won!');
+                document.querySelector('.winner').textContent = 'You won! Choose option.';
+            }
+            else if ( AIchoice == 'paper' && playerChoice == 'rock' ) {
+                p2score++;
+                p2scoreText.textContent = p2score;
+                p2row++;
+                p1row = 0;
+                console.log('Computer won!');
+                document.querySelector('.winner').textContent = 'Computer won! Choose option.';
+            }
+            else if ( AIchoice == 'scissors' && playerChoice == 'rock' ) {
+                p1score++;
+                p1scoreText.textContent = p1score;
+                p1row++;
+                p2row = 0;
+                console.log('Player won!');
+                document.querySelector('.winner').textContent = 'You won! Choose option.';
+            }
+            else if ( AIchoice == 'scissors' && playerChoice == 'paper' ) {
+                p2score++;
+                p2scoreText.textContent = p2score;
+                p2row++;
+                p1row = 0;
+                console.log('Computer won!');
+                document.querySelector('.winner').textContent = 'Computer won! Choose option.';
+            }
+            else {
+                p1row = 0;
+                p2row = 0;
+                console.log('Nobody won!');
+                document.querySelector('.winner').textContent = 'Nobody won! Choose option.';
+            }
+            // If somebody has maximum score we should end the game
+            if(p1score >= 10 || p2score >= 10 || p1row >= 3 || p2row >= 3 ) {
+                rockButton.removeEventListener('click', HandleRock); // This step is vital for restart mechanics, we must remove all button event listeners.
+                scissorsButton.removeEventListener('click', HandleScissors); // Otherwise we will find ourselves pressing one button several times and determining several results. 
+                paperButton.removeEventListener('click', HandlePaper);
+                endGame(p1score, p2score, p1row, p2row);
+            }
         }
     }
 }
@@ -425,6 +501,13 @@ function restartGame() {
     p2score = 0;
     p1row = 0;
     p2row = 0;
+    p1Resultlog = [];
+    p2Resultlog = [];
+    // returning hands in the normal state
+    document.querySelector('.p1hand').classList.add('fadeOut');
+    document.querySelector('.p2hand').classList.add('fadeOut');
+    document.querySelector('.p1hand').classList.remove('fadeIn');
+    document.querySelector('.p2hand').classList.remove('fadeIn');
     document.querySelector('.p1-score p').textContent = p1score;
     document.querySelector('.p2-score p').textContent = p2score;
     // returning start screen
