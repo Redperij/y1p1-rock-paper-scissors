@@ -62,8 +62,8 @@ function startMatchPvP() {
         document.querySelector('.turnscreen').classList.remove('fadeIn');
         document.querySelector('.match').classList.add('fadeIn');
         // switching hands
-        p2hand.style.display = 'none';
-        p1hand.style.display = 'block'
+        p2hand.classList.remove('fadeIn');
+        p1hand.classList.add('fadeIn');
 
         rockButton.addEventListener('click', HandleRock); // Player 1 chosen rock
         function HandleRock() {
@@ -109,8 +109,8 @@ function startMatchPvP() {
         // removing button
         document.querySelector('#readycontinue').removeEventListener('click', p2turn);
         // switching hands
-        p1hand.style.display = 'none';
-        p2hand.style.display = 'block';
+        p1hand.classList.remove('fadeIn');
+        p2hand.classList.add('fadeIn');
         // hiding turn screen and showing match screen
         document.querySelector('.turnscreen').classList.remove('fadeIn');
         document.querySelector('.match').classList.add('fadeIn');
@@ -148,7 +148,36 @@ function startMatchPvP() {
     }
     // This function determines round result and need to continue match.
     function result() {
-        p1hand.style.display = 'block'
+        // Hiding screen and options
+        document.querySelector('.winner').classList.add('fadeOut');
+        document.querySelector('.options').classList.add('fadeOut');
+        // HIding hand
+        p2hand.classList.remove('fadeIn');
+
+        // Preparation for animation
+        p2hand.src = 'gfx/rock.png';
+        p1hand.src = 'gfx/rock.png';
+        p2hand.classList.add('fadeIn');
+        p1hand.classList.add('fadeIn');
+
+        // Handling animation
+        p1hand.style.animation = "shakePlayer1 2s ease";
+        p2hand.style.animation = "shakePlayer2 2s ease";
+
+        setTimeout(() => {
+            // Showing choices
+            p1hand.src = `gfx/${p1choice}.png`;
+            p2hand.src = `gfx/${p2choice}.png`;
+
+            // Showing screen and options
+            document.querySelector('.winner').classList.remove('fadeOut');
+            document.querySelector('.options').classList.remove('fadeOut');
+
+            // Removing animation
+            p1hand.style.animation = "";
+            p2hand.style.animation = "";
+        }, 2000 );
+
         if ( p2choice == 'rock' && p1choice == 'paper' ) {
             p1score++;
             p1scoreText.textContent = p1score;
