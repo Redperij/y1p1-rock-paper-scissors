@@ -1,5 +1,5 @@
 // Globals
-let AiIsOn = false;
+let AiIsOn = true;
 let p1score = 0; // First player score
 let p2score = 0; // Second player score
 let p1row = 0; // Used for determining quantity of rounds won by player in a row
