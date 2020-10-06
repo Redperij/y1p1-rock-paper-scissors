@@ -213,7 +213,7 @@ function startMatchPvP() {
                 p1row++;
                 p2row = 0;
                 console.log('Player 1 won');
-                document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Player 1 won round! Press Next round to continue';
             }
             else if ( p2choice == 'rock' && p1choice == 'scissors' ) {
                 p2score++;
@@ -221,7 +221,7 @@ function startMatchPvP() {
                 p2row++;
                 p1row = 0;
                 console.log('Player 2 won');
-                document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Player 2 won round! Press Next round to continue';
             }
             else if ( p2choice == 'paper' && p1choice == 'scissors' ) {
                 p1score++;
@@ -229,7 +229,7 @@ function startMatchPvP() {
                 p1row++;
                 p2row = 0;
                 console.log('Player 1 won');
-                document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Player 1 won round! Press Next round to continue';
             }
             else if ( p2choice == 'paper' && p1choice == 'rock' ) {
                 p2score++;
@@ -237,7 +237,7 @@ function startMatchPvP() {
                 p2row++;
                 p1row = 0;
                 console.log('Player 2 won');
-                document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Player 2 won round! Press Next round to continue';
             }
             else if ( p2choice == 'scissors' && p1choice == 'rock' ) {
                 p1score++;
@@ -245,7 +245,7 @@ function startMatchPvP() {
                 p1row++;
                 p2row = 0;
                 console.log('Player 1 won');
-                document.querySelector('.winner').textContent = 'Player 1 won round! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Player 1 won round! Press Next round to continue';
             }
             else if ( p2choice == 'scissors' && p1choice == 'paper' ) {
                 p2score++;
@@ -253,13 +253,13 @@ function startMatchPvP() {
                 p2row++;
                 p1row = 0;
                 console.log('Player 2 won');
-                document.querySelector('.winner').textContent = 'Player 2 won round! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Player 2 won round! Press Next round to continue';
             }
             else {
                 p1row = 0;
                 p2row = 0;
                 console.log('Nobody won');
-                document.querySelector('.winner').textContent = 'Nobody won! Press any button to continue';
+                document.querySelector('.winner').textContent = 'Nobody won! Press Next round to continue';
             }
             // Showing choices log
             console.log('Player 1 choices are:');
@@ -274,17 +274,19 @@ function startMatchPvP() {
             }
             // In other case we have to keep playing
             else {
-                rockButton.addEventListener('click', prepareP1turn);
+                rockButton.classList.add('fadeOut');
+                scissorsButton.classList.add('fadeOut');
+                paperButton.textContent = 'Next round';
                 paperButton.addEventListener('click', prepareP1turn);
-                scissorsButton.addEventListener('click', prepareP1turn);
             }
         }
     }
     // This function starts next round. In other words, reverts everything to the state of first player's turn.
     function prepareP1turn() {
-        rockButton.removeEventListener('click', prepareP1turn);
+        paperButton.textContent = 'Paper';
+        rockButton.classList.remove('fadeOut');
+        scissorsButton.classList.remove('fadeOut');
         paperButton.removeEventListener('click', prepareP1turn);
-        scissorsButton.removeEventListener('click', prepareP1turn);
         // Hiding match screen and preparing turn screen
         document.querySelector('.match').classList.remove('fadeIn');
         document.querySelector('.turnscreen h2').textContent = 'Player 1 turn';
